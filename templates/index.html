@@ -2,32 +2,34 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Nintendo Deals RD</title>
+    <title>Nintendo Deals</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
+
 <body>
 
 <header class="navbar">
-    <div class="logo">
+    <a href="/" class="logo">
         <span>ND</span>
         <div>
             <strong>Nintendo</strong>
             <p>Deals</p>
         </div>
-    </div>
+    </a>
 
     <nav>
         <a href="/">Inicio</a>
-        <a href="#">Ofertas</a>
-        <a href="#">Juegos</a>
-        <a href="#">Consolas</a>
+        <a href="/?category=switch">Switch</a>
+        <a href="/?category=mario">Mario</a>
+        <a href="/?category=zelda">Zelda</a>
+        <a href="/?category=pokemon">Pokémon</a>
     </nav>
 
     <div class="nav-icons">
+        <button>❤️</button>
         <button>🛒</button>
-        <button>👤</button>
     </div>
 </header>
 
@@ -37,10 +39,10 @@
     <p>Compara ofertas de videojuegos, consolas y accesorios antes de comprar.</p>
 
     <form method="GET" action="/" class="search-box">
-        <input 
-            type="text" 
-            name="search" 
-            placeholder="¿Qué juego quieres buscar hoy? Mario, Zelda, Pokémon..."
+        <input
+            type="text"
+            name="search"
+            placeholder="Buscar Mario, Zelda, Pokémon, Donkey Kong..."
             value="{{ search }}"
         >
         <button type="submit">Buscar</button>
@@ -48,14 +50,14 @@
 </section>
 
 <section class="categories">
-    <div>🎮<span>Todos</span></div>
-    <div>🍄<span>Mario</span></div>
-    <div>🗡️<span>Zelda</span></div>
-    <div>⚡<span>Pokémon</span></div>
-    <div>🦍<span>Donkey Kong</span></div>
-    <div>⭐<span>Kirby</span></div>
-    <div>🚀<span>Metroid</span></div>
-    <div>🕹️<span>Switch</span></div>
+    <a href="/?category=todos">🎮<span>Todos</span></a>
+    <a href="/?category=mario">🍄<span>Mario</span></a>
+    <a href="/?category=zelda">🗡️<span>Zelda</span></a>
+    <a href="/?category=pokemon">⚡<span>Pokémon</span></a>
+    <a href="/?category=donkey">🦍<span>Donkey Kong</span></a>
+    <a href="/?category=kirby">⭐<span>Kirby</span></a>
+    <a href="/?category=metroid">🚀<span>Metroid</span></a>
+    <a href="/?category=switch">🕹️<span>Switch</span></a>
 </section>
 
 <main class="content">
@@ -64,6 +66,7 @@
         <a href="/">Ver todas</a>
     </div>
 
+    {% if products|length > 0 %}
     <div class="product-grid">
         {% for product in products %}
         <article class="product-card">
@@ -75,6 +78,7 @@
 
             <div class="product-info">
                 <span class="tag">Nintendo</span>
+
                 <h3>{{ product.title }}</h3>
 
                 <p class="price">
@@ -85,15 +89,14 @@
                     Página {{ product.page_number }}
                 </p>
 
-                <a href="{{ product.product_url }}" target="_blank" class="btn">
-                    Ver producto
+                <a href="/product/{{ product.id }}" class="btn">
+                    Ver detalles
                 </a>
             </div>
         </article>
         {% endfor %}
     </div>
-
-    {% if products|length == 0 %}
+    {% else %}
     <div class="empty">
         <h3>No encontramos productos</h3>
         <p>Intenta buscar otro juego o consola.</p>
@@ -102,8 +105,10 @@
 </main>
 
 <footer class="footer">
-    <p>© 2026 Nintendo Deals RD. Proyecto personal de comparación de precios.</p>
+    <p>© 2026 Nintendo Deals. Proyecto personal de comparación de precios.</p>
 </footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </body>
 </html>

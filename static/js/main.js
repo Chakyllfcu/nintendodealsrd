@@ -1,61 +1,38 @@
-// Navbar shadow
-
 window.addEventListener("scroll", () => {
+    const navbar = document.querySelector(".navbar");
 
-    const nav = document.querySelector(".navbar");
+    if (!navbar) return;
 
-    if(window.scrollY > 40){
-
-        nav.style.boxShadow="0 5px 20px rgba(0,0,0,.10)";
-
-    }else{
-
-        nav.style.boxShadow="none";
-
+    if (window.scrollY > 40) {
+        navbar.style.boxShadow = "0 5px 20px rgba(0,0,0,.10)";
+    } else {
+        navbar.style.boxShadow = "none";
     }
-
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll(".product-card");
 
+    cards.forEach((card, index) => {
+        card.style.opacity = 0;
+        card.style.transform = "translateY(25px)";
 
-// Animación de aparición
-
-const cards = document.querySelectorAll(".product-card");
-
-cards.forEach((card,index)=>{
-
-    card.style.opacity=0;
-
-    card.style.transform="translateY(30px)";
-
-    setTimeout(()=>{
-
-        card.style.transition=".5s";
-
-        card.style.opacity=1;
-
-        card.style.transform="translateY(0px)";
-
-    },index*80);
-
-});
-
-
-
-// Confirmar salida
-
-const links = document.querySelectorAll(".btn");
-
-links.forEach(link=>{
-
-    link.addEventListener("click",(e)=>{
-
-        if(!confirm("¿Deseas abrir este producto en una nueva pestaña?")){
-
-            e.preventDefault();
-
-        }
-
+        setTimeout(() => {
+            card.style.transition = ".45s ease";
+            card.style.opacity = 1;
+            card.style.transform = "translateY(0)";
+        }, index * 60);
     });
 
+    const externalButtons = document.querySelectorAll('a[target="_blank"]');
+
+    externalButtons.forEach((button) => {
+        button.addEventListener("click", (event) => {
+            const confirmOpen = confirm("¿Deseas abrir este producto en una nueva pestaña?");
+
+            if (!confirmOpen) {
+                event.preventDefault();
+            }
+        });
+    });
 });
