@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nintendo Deals RD</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">
+        <span>ND</span>
+        <div>
+            <strong>Nintendo</strong>
+            <p>Deals</p>
+        </div>
+    </div>
+
+    <nav>
+        <a href="/">Inicio</a>
+        <a href="#">Ofertas</a>
+        <a href="#">Juegos</a>
+        <a href="#">Consolas</a>
+    </nav>
+
+    <div class="nav-icons">
+        <button>🛒</button>
+        <button>👤</button>
+    </div>
+</header>
+
+<section class="hero">
+    <h1>Busca, compara y juega</h1>
+    <h2>Encuentra juegos de Nintendo al mejor precio</h2>
+    <p>Compara ofertas de videojuegos, consolas y accesorios antes de comprar.</p>
+
+    <form method="GET" action="/" class="search-box">
+        <input 
+            type="text" 
+            name="search" 
+            placeholder="¿Qué juego quieres buscar hoy? Mario, Zelda, Pokémon..."
+            value="{{ search }}"
+        >
+        <button type="submit">Buscar</button>
+    </form>
+</section>
+
+<section class="categories">
+    <div>🎮<span>Todos</span></div>
+    <div>🍄<span>Mario</span></div>
+    <div>🗡️<span>Zelda</span></div>
+    <div>⚡<span>Pokémon</span></div>
+    <div>🦍<span>Donkey Kong</span></div>
+    <div>⭐<span>Kirby</span></div>
+    <div>🚀<span>Metroid</span></div>
+    <div>🕹️<span>Switch</span></div>
+</section>
+
+<main class="content">
+    <div class="section-header">
+        <h2>Mejores ofertas de hoy</h2>
+        <a href="/">Ver todas</a>
+    </div>
+
+    <div class="product-grid">
+        {% for product in products %}
+        <article class="product-card">
+            <div class="discount">Oferta</div>
+
+            <div class="image-box">
+                <img src="{{ product.image }}" alt="{{ product.title }}">
+            </div>
+
+            <div class="product-info">
+                <span class="tag">Nintendo</span>
+                <h3>{{ product.title }}</h3>
+
+                <p class="price">
+                    RD${{ product.price }}
+                </p>
+
+                <p class="store">
+                    Página {{ product.page_number }}
+                </p>
+
+                <a href="{{ product.product_url }}" target="_blank" class="btn">
+                    Ver producto
+                </a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    {% if products|length == 0 %}
+    <div class="empty">
+        <h3>No encontramos productos</h3>
+        <p>Intenta buscar otro juego o consola.</p>
+    </div>
+    {% endif %}
+</main>
+
+<footer class="footer">
+    <p>© 2026 Nintendo Deals RD. Proyecto personal de comparación de precios.</p>
+</footer>
+
+</body>
+</html>

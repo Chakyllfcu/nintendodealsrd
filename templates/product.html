@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>{{ product.title }}</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/styles.css') }}">
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+
+        <span>ND</span>
+
+        <div>
+
+            <strong>Nintendo</strong>
+
+            <p>Deals</p>
+
+        </div>
+
+    </div>
+
+    <nav>
+
+        <a href="/">Inicio</a>
+
+        <a href="/">Ofertas</a>
+
+        <a href="/">Juegos</a>
+
+    </nav>
+
+</header>
+
+
+<div class="product-page">
+
+    <div class="product-image">
+
+        <img src="{{ product.image }}" alt="{{ product.title }}">
+
+    </div>
+
+    <div class="product-details">
+
+        <span class="tag">Nintendo</span>
+
+        <h1>{{ product.title }}</h1>
+
+        <h2 class="price">
+
+            RD${{ product.price }}
+
+        </h2>
+
+        <table class="info-table">
+
+            <tr>
+
+                <td><strong>Página</strong></td>
+
+                <td>{{ product.page_number }}</td>
+
+            </tr>
+
+            <tr>
+
+                <td><strong>Fecha Fin Oferta</strong></td>
+
+                <td>{{ product.end_date }}</td>
+
+            </tr>
+
+            <tr>
+
+                <td><strong>Actualizado</strong></td>
+
+                <td>{{ product.scraped_at }}</td>
+
+            </tr>
+
+        </table>
+
+        <a
+            href="{{ product.product_url }}"
+            target="_blank"
+            class="btn">
+
+            Comprar ahora
+
+        </a>
+
+    </div>
+
+</div>
+
+<footer class="footer">
+
+    Nintendo Deals © 2026
+
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>
