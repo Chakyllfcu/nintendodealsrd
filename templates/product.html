@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>{{ product.title }} | Nintendo Deals</title>
+    <title>{{ product_data.product.product_name }} | Nintendo Deals</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
@@ -34,46 +34,49 @@
 
 <main class="product-page">
     <div class="product-image">
-        <img src="{{ product.image }}" alt="{{ product.title }}">
+        <img 
+            src="{{ product_data.product.image_url or url_for('static', filename='img/no-image.png') }}" 
+            alt="{{ product_data.product.product_name }}"
+        >
     </div>
 
     <div class="product-details">
-        <span class="tag">Nintendo</span>
+        <span class="tag">{{ product_data.product.platform or 'Nintendo' }}</span>
 
-        <h1>{{ product.title }}</h1>
+        <h1>{{ product_data.product.product_name }}</h1>
 
         <h2 class="price">
-            RD${{ product.price }}
+            RD${{ "{:,.2f}".format(product_data.cheapest_price.price|float) }}
         </h2>
 
         <p class="product-description">
-            Compara esta oferta y revisa los detalles antes de comprar.
+            Compara esta oferta entre diferentes tiendas y revisa el histórico antes de comprar.
         </p>
 
         <table class="info-table">
             <tr>
                 <td><strong>ID Producto</strong></td>
-                <td>{{ product.id }}</td>
+                <td>{{ product_data.product.product_id }}</td>
             </tr>
 
             <tr>
-                <td><strong>Página</strong></td>
-                <td>{{ product.page_number }}</td>
+                <td><strong>Categoría</strong></td>
+                <td>{{ product_data.product.category or 'Games' }}</td>
             </tr>
 
             <tr>
-                <td><strong>Fecha fin oferta</strong></td>
-                <td>{{ product.end_date }}</td>
+                <td><strong>Tienda más barata</strong></td>
+                <td>{{ product_data.cheapest_price.store_name }}</td>
             </tr>
 
             <tr>
-                <td><strong>Actualizado</strong></td>
-                <td>{{ product.scraped_at }}</td>
+                <td><strong>Última actualización</strong></td>
+                <td>{{ product_data.last_updated[:10] }}</td>
             </tr>
         </table>
 
         <div class="detail-actions">
-            <a href="{{ product.product_url }}" target="_blank" class="btn">
+            <a href="{{ product_data.cheapest_price.product_url }}" target="_blank" class="btn">
                 Comprar ahora
             </a>
 
@@ -82,6 +85,47 @@
             </a>
         </div>
     </div>
+</main>
+
+<main class="content">
+    <div class="section-header">
+        <h2>Comparación por tienda</h2>
+    </div>
+
+    <table class="info-table">
+        {% for store in product_data.stores %}
+        <tr>
+            <td><strong>{{ store.store_name }}</strong></td>
+            <td>RD${{ "{:,.2f}".format(store.price|float) }}</td>
+            <td>
+                <a href="{{ store.product_url }}" target="_blank" class="btn secondary">
+                    Ver tienda
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="section-header">
+        <h2>Histórico de precios</h2>
+    </div>
+
+    {% if history %}
+    <table class="info-table">
+        {% for item in history %}
+        <tr>
+            <td>{{ item.scraped_at[:10] }}</td>
+            <td>{{ item.store_name }}</td>
+            <td><strong>RD${{ "{:,.2f}".format(item.price|float) }}</strong></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <div class="empty">
+        <h3>No hay histórico disponible</h3>
+        <p>Cuando el scraper detecte cambios de precio, aparecerán aquí.</p>
+    </div>
+    {% endif %}
 </main>
 
 <footer class="footer">

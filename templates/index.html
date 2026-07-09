@@ -41,9 +41,9 @@
     <form method="GET" action="/" class="search-box">
         <input
             type="text"
-            name="search"
+            name="q"
             placeholder="Buscar Mario, Zelda, Pokémon, Donkey Kong..."
-            value="{{ search }}"
+            value="{{ search or '' }}"
         >
         <button type="submit">Buscar</button>
     </form>
@@ -70,27 +70,30 @@
     <div class="product-grid">
         {% for product in products %}
         <article class="product-card">
-            <div class="discount">Oferta</div>
+            <div class="discount">Mejor precio</div>
 
             <div class="image-box">
-                <img src="{{ product.image }}" alt="{{ product.title }}">
+                <img 
+                    src="{{ product.image_url or url_for('static', filename='img/no-image.png') }}" 
+                    alt="{{ product.product_name }}"
+                >
             </div>
 
             <div class="product-info">
-                <span class="tag">Nintendo</span>
+                <span class="tag">{{ product.platform or 'Nintendo' }}</span>
 
-                <h3>{{ product.title }}</h3>
+                <h3>{{ product.product_name }}</h3>
 
                 <p class="price">
-                    RD${{ product.price }}
+                    RD${{ "{:,.2f}".format(product.lowest_price|float) }}
                 </p>
 
                 <p class="store">
-                    Página {{ product.page_number }}
+                    Mejor precio en {{ product.store_name }}
                 </p>
 
-                <a href="/product/{{ product.id }}" class="btn">
-                    Ver detalles
+                <a href="/product/{{ product.product_id }}" class="btn">
+                    Ver comparación
                 </a>
             </div>
         </article>
