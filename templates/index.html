@@ -2,17 +2,27 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Nintendo Deals</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Nintendo Deals</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/styles.css') }}"
+    >
 </head>
 
 <body>
 
 <header class="navbar">
-    <a href="/" class="logo">
+
+    <a href="{{ url_for('home') }}" class="logo">
         <span>ND</span>
+
         <div>
             <strong>Nintendo</strong>
             <p>Deals</p>
@@ -20,98 +30,392 @@
     </a>
 
     <nav>
-        <a href="/">Inicio</a>
-        <a href="/?category=switch">Switch</a>
-        <a href="/?category=mario">Mario</a>
-        <a href="/?category=zelda">Zelda</a>
-        <a href="/?category=pokemon">Pokémon</a>
+        <a href="{{ url_for('home') }}">
+            Inicio
+        </a>
+
+        <a href="{{ url_for('home', category='switch') }}">
+            Switch
+        </a>
+
+        <a href="{{ url_for('home', category='mario') }}">
+            Mario
+        </a>
+
+        <a href="{{ url_for('home', category='zelda') }}">
+            Zelda
+        </a>
+
+        <a href="{{ url_for('home', category='pokemon') }}">
+            Pokémon
+        </a>
     </nav>
 
     <div class="nav-icons">
-        <button>❤️</button>
-        <button>🛒</button>
+        <button type="button" aria-label="Favoritos">
+            ❤️
+        </button>
+
+        <button type="button" aria-label="Carrito">
+            🛒
+        </button>
     </div>
+
 </header>
 
-<section class="hero">
-    <h1>Busca, compara y juega</h1>
-    <h2>Encuentra juegos de Nintendo al mejor precio</h2>
-    <p>Compara ofertas de videojuegos, consolas y accesorios antes de comprar.</p>
 
-    <form method="GET" action="/" class="search-box">
+<section class="hero">
+
+    <h1>Busca, compara y juega</h1>
+
+    <h2>
+        Encuentra juegos de Nintendo al mejor precio
+    </h2>
+
+    <p>
+        Compara precios entre tiendas de videojuegos
+        de República Dominicana.
+    </p>
+
+    <form
+        method="GET"
+        action="{{ url_for('home') }}"
+        class="search-box"
+    >
         <input
-            type="text"
+            type="search"
             name="q"
             placeholder="Buscar Mario, Zelda, Pokémon, Donkey Kong..."
             value="{{ search or '' }}"
+            autocomplete="off"
         >
-        <button type="submit">Buscar</button>
+
+        <button type="submit">
+            Buscar
+        </button>
     </form>
+
 </section>
+
 
 <section class="categories">
-    <a href="/?category=todos">🎮<span>Todos</span></a>
-    <a href="/?category=mario">🍄<span>Mario</span></a>
-    <a href="/?category=zelda">🗡️<span>Zelda</span></a>
-    <a href="/?category=pokemon">⚡<span>Pokémon</span></a>
-    <a href="/?category=donkey">🦍<span>Donkey Kong</span></a>
-    <a href="/?category=kirby">⭐<span>Kirby</span></a>
-    <a href="/?category=metroid">🚀<span>Metroid</span></a>
-    <a href="/?category=switch">🕹️<span>Switch</span></a>
+
+    <a
+        href="{{ url_for('home') }}"
+        class="category-item {% if not category %}active{% endif %}"
+    >
+        🎮
+        <span>Todos</span>
+    </a>
+
+    <a
+        href="{{ url_for('home', category='mario') }}"
+        class="category-item {% if category == 'mario' %}active{% endif %}"
+    >
+        🍄
+        <span>Mario</span>
+    </a>
+
+    <a
+        href="{{ url_for('home', category='zelda') }}"
+        class="category-item {% if category == 'zelda' %}active{% endif %}"
+    >
+        🗡️
+        <span>Zelda</span>
+    </a>
+
+    <a
+        href="{{ url_for('home', category='pokemon') }}"
+        class="category-item {% if category == 'pokemon' %}active{% endif %}"
+    >
+        ⚡
+        <span>Pokémon</span>
+    </a>
+
+    <a
+        href="{{ url_for('home', category='donkey') }}"
+        class="category-item {% if category == 'donkey' %}active{% endif %}"
+    >
+        🦍
+        <span>Donkey Kong</span>
+    </a>
+
+    <a
+        href="{{ url_for('home', category='kirby') }}"
+        class="category-item {% if category == 'kirby' %}active{% endif %}"
+    >
+        ⭐
+        <span>Kirby</span>
+    </a>
+
+    <a
+        href="{{ url_for('home', category='metroid') }}"
+        class="category-item {% if category == 'metroid' %}active{% endif %}"
+    >
+        🚀
+        <span>Metroid</span>
+    </a>
+
+    <a
+        href="{{ url_for('home', category='switch') }}"
+        class="category-item {% if category == 'switch' %}active{% endif %}"
+    >
+        🕹️
+        <span>Switch</span>
+    </a>
+
 </section>
 
+
 <main class="content">
+
     <div class="section-header">
-        <h2>Mejores ofertas de hoy</h2>
-        <a href="/">Ver todas</a>
+
+        <div>
+            {% if search %}
+                <h2>
+                    Resultados para “{{ search }}”
+                </h2>
+
+            {% elif category %}
+                <h2>
+                    Resultados para “{{ category|title }}”
+                </h2>
+
+            {% else %}
+                <h2>
+                    Mejores precios disponibles
+                </h2>
+            {% endif %}
+
+            <p class="result-count">
+                {{ products|length }}
+
+                {% if products|length == 1 %}
+                    producto encontrado
+                {% else %}
+                    productos encontrados
+                {% endif %}
+            </p>
+        </div>
+
+        <a href="{{ url_for('home') }}">
+            Ver todos
+        </a>
+
     </div>
 
-    {% if products|length > 0 %}
-    <div class="product-grid">
-        {% for product in products %}
-        <article class="product-card">
-            <div class="discount">Mejor precio</div>
 
-            <div class="image-box">
-                <img 
-                    src="{{ product.image_url or url_for('static', filename='img/no-image.png') }}" 
-                    alt="{{ product.product_name }}"
-                >
-            </div>
+    {% if api_error %}
 
-            <div class="product-info">
-                <span class="tag">{{ product.platform or 'Nintendo' }}</span>
+        <div class="error-message">
+            <h3>No fue posible cargar los productos</h3>
+            <p>{{ api_error }}</p>
+        </div>
 
-                <h3>{{ product.product_name }}</h3>
 
-                <p class="price">
-                    RD${{ "{:,.2f}".format(product.lowest_price|float) }}
-                </p>
+    {% elif products and products|length > 0 %}
 
-                <p class="store">
-                    Mejor precio en {{ product.store_name }}
-                </p>
+        <div class="product-grid">
 
-                <a href="/product/{{ product.product_id }}" class="btn">
-                    Ver comparación
-                </a>
-            </div>
-        </article>
-        {% endfor %}
-    </div>
+            {% for product in products %}
+
+                {% set product_price =
+                    product.lowest_price
+                    if product.lowest_price is defined
+                    else product.price
+                %}
+
+                {% set product_currency =
+                    product.currency
+                    if product.currency is defined and product.currency
+                    else 'DOP'
+                %}
+
+                {% set updated_date =
+                    product.last_updated
+                    if product.last_updated is defined
+                    else product.scraped_at
+                %}
+
+                <article class="product-card">
+
+                    {% if product.is_available is defined %}
+
+                        {% if product.is_available %}
+                            <div class="discount available">
+                                Disponible
+                            </div>
+                        {% else %}
+                            <div class="discount unavailable">
+                                No disponible
+                            </div>
+                        {% endif %}
+
+                    {% else %}
+
+                        <div class="discount available">
+                            Mejor precio
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="image-box">
+
+                        <img
+                            src="{{ product.image_url or url_for('static', filename='img/no-image.png') }}"
+                            data-fallback="{{ url_for('static', filename='img/no-image.png') }}"
+                            alt="{{ product.product_name or 'Producto Nintendo' }}"
+                            loading="lazy"
+                            class="product-image"
+                        >
+
+                    </div>
+
+
+                    <div class="product-info">
+
+                        <div class="product-tags">
+
+                            <span class="tag">
+                                {{ product.platform or 'Nintendo' }}
+                            </span>
+
+                            {% if product.category %}
+                                <span class="category-tag">
+                                    {{ product.category }}
+                                </span>
+                            {% endif %}
+
+                        </div>
+
+
+                        <h3>
+                            {{ product.product_name or 'Producto sin nombre' }}
+                        </h3>
+
+
+                        <p class="price">
+
+                            {% if product_currency == 'DOP' %}
+                                RD$
+                            {% else %}
+                                {{ product_currency }}
+                            {% endif %}
+
+                            {{
+                                "{:,.2f}".format(
+                                    product_price|default(0, true)|float
+                                )
+                            }}
+
+                        </p>
+
+
+                        {% if product.store_name %}
+
+                            <div class="store-information">
+
+                                {% if product.logo_url %}
+                                    <img
+                                        src="{{ product.logo_url }}"
+                                        alt="{{ product.store_name }}"
+                                        class="store-logo"
+                                        loading="lazy"
+                                    >
+                                {% endif %}
+
+                                <p class="store">
+                                    Mejor precio en
+
+                                    <strong>
+                                        {{ product.store_name }}
+                                    </strong>
+                                </p>
+
+                            </div>
+
+                        {% endif %}
+
+                        <div class="product-actions">
+
+                            {% if product.product_id %}
+
+                                <a
+                                    href="{{ url_for(
+                                        'product_detail',
+                                        product_id=product.product_id
+                                    ) }}"
+                                    class="btn"
+                                >
+                                    Ver comparación
+                                </a>
+
+                            {% endif %}
+
+
+                            {% if product.product_url %}
+
+                                <a
+                                    href="{{ product.product_url }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="btn secondary"
+                                >
+                                    Ir a la tienda
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+
     {% else %}
-    <div class="empty">
-        <h3>No encontramos productos</h3>
-        <p>Intenta buscar otro juego o consola.</p>
-    </div>
+
+        <div class="empty">
+
+            <h3>No encontramos productos</h3>
+
+            <p>
+                Intenta buscar otro juego, consola o franquicia.
+            </p>
+
+            <a
+                href="{{ url_for('home') }}"
+                class="btn"
+            >
+                Mostrar todos
+            </a>
+
+        </div>
+
     {% endif %}
+
 </main>
 
+
 <footer class="footer">
-    <p>© 2026 Nintendo Deals. Proyecto personal de comparación de precios.</p>
+
+    <p>
+        © 2026 Nintendo Deals.
+        Comparador de precios de videojuegos en República Dominicana.
+    </p>
+
 </footer>
 
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+<script
+    src="{{ url_for('static', filename='js/main.js') }}"
+></script>
 
 </body>
 </html>

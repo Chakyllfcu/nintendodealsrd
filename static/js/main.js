@@ -24,6 +24,20 @@ document.addEventListener("DOMContentLoaded", () => {
         }, index * 60);
     });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const productImages = document.querySelectorAll(".product-image");
+
+    productImages.forEach((image) => {
+        image.addEventListener("error", () => {
+            const fallbackImage = image.dataset.fallback;
+
+            if (fallbackImage && image.src !== fallbackImage) {
+                image.src = fallbackImage;
+            }
+        });
+    });
+    });
+
     const externalButtons = document.querySelectorAll('a[target="_blank"]');
 
     externalButtons.forEach((button) => {
